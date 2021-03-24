@@ -3,32 +3,32 @@ import java.util.Arrays;
 public class SearchAndSort {
 	public static void main(String[] args) {
 		int[] array = {10, 80, 30, 90, 40, 50, 70};
-//		System.out.println(binarySearch(array, 10));
-//		System.out.println(findPeek(array));
-//		System.out.println(recFindPeek(array, 0, array.length - 1));
-//		bubbleSort(array);
-//		selectionSort(array);
-//		System.out.println(Arrays.toString(array));
-//		insertionSort(array);
-//		System.out.println(Arrays.toString(array));
-//		mergeSort(array, 0, array.length - 1);
+		System.out.println(binarySearch(array, 10));
+		System.out.println(findPeek(array));
+		System.out.println(recFindPeek(array, 0, array.length - 1));
+		bubbleSort(array);
+		selectionSort(array);
+		System.out.println(Arrays.toString(array));
+		insertionSort(array);
+		System.out.println(Arrays.toString(array));
+		mergeSort(array, 0, array.length - 1);
 		quickSort(array, 0, array.length - 1);
 		System.out.println(Arrays.toString(array));
 	}
 	
 	public static int binarySearch(int[] array, int target) { // O(logn)
-	    int min = 0;
-	    int max = array.length - 1;
-	    while (min <= max) {
-	        int mid = (min + max) / 2;
-	        if (array[mid] < target)
-	            min = mid + 1;
-	        else if (array[mid] > target)
-	            max = mid - 1;
-	        else
-	            return mid;
-	    }
-	    return -1;
+		int min = 0;
+		int max = array.length - 1;
+		while (min <= max) {
+		int mid = (min + max) / 2;
+		if (array[mid] < target)
+			min = mid + 1;
+		else if (array[mid] > target)
+			max = mid - 1;
+		else
+			return mid;
+		}
+		return -1;
 	}
 	
 	// If array[n / 2] < array[n / 2 - 1] then look at left half
