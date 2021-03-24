@@ -1,104 +1,169 @@
-import java.util.Stack;
-import java.util.Queue;
-import java.util.LinkedList;
 import java.util.Arrays;
 
 public class SearchAndSort {
-  public static int bs(int[] nums, int value, int min, int max) {
-    if (min > max)
-      return -1;
-    int mid = (max + min) / 2;
-    if (nums[mid] == value)
-      return mid;
-    else if (nums[mid] > value)
-      return bs(nums, value, min, mid - 1);
-    else
-      return bs(nums, value, mid + 1, max);
-  }
+	public static void main(String[] args) {
+		int[] array = {10, 80, 30, 90, 40, 50, 70};
+//		System.out.println(binarySearch(array, 10));
+//		System.out.println(findPeek(array));
+//		System.out.println(recFindPeek(array, 0, array.length - 1));
+//		bubbleSort(array);
+//		selectionSort(array);
+//		System.out.println(Arrays.toString(array));
+//		insertionSort(array);
+//		System.out.println(Arrays.toString(array));
+//		mergeSort(array, 0, array.length - 1);
+//		quickSort(array, 0, array.length - 1);
+		System.out.println(Arrays.toString(array));
+	}
+	
+	public static int binarySearch(int[] array, int target) { // O(logn)
+	    int min = 0;
+	    int max = array.length - 1;
+	    while (min <= max) {
+	        int mid = (min + max) / 2;
+	        if (array[mid] < target)
+	            min = mid + 1;
+	        else if (array[mid] > target)
+	            max = mid - 1;
+	        else
+	            return mid;
+	    }
+	    return -1;
+	}
+	
+	// If array[n / 2] < array[n / 2 - 1] then look at left half
+	// Else if array[n / 2] < array[n / 2 + 1] then look at right half
+	// Else array[n / 2] is a peek
+	public static int findPeek(int[] array) { // O(logn)
+		int start = 0, end = array.length - 1;
+		while (start <= end) {
+			int mid = (start + end) / 2;
+			if ((mid == 0 || array[mid] >= array[mid - 1]) && 
+					(mid == array.length - 1 || array[mid] >= array[mid + 1]))
+				return mid;
+			else if (mid > 0 && array[mid - 1] > array[mid])
+				end = mid - 1;
+			else
+				start = mid + 1;
+		}
+		return -1;
+	}
+	
+	public static int recFindPeek(int[] array, int start, int end) { // O(logn)
+		int mid = (start + end) / 2;
+		if ((mid == 0 || array[mid] >= array[mid - 1]) && 
+				(mid == array.length - 1 || array[mid] >= array[mid + 1]))
+			return mid;
+		else if (mid > 0 && array[mid - 1] > array[mid])
+			return recFindPeek(array, (mid - 1), end);
+		else
+			return recFindPeek(array, (mid + 1), end);
+	}
+	
+	public static void bubbleSort(int[] array) {
+		for (int i = 0; i < array.length - 1; i++) {
+			for (int j = 1; j < array.length - i; j++) {
+				if (array[j - 1] < array[j]) {
+					int temp = array[j - 1];
+		        	array[j - 1] = array[j];
+		        	array[j] = temp;
+		        }
+		    }
+		}
+	}
+	
+	public static void selectionSort(int[] array) { // O(n^2)
+		for (int i = 0; i < array.length - 1; i++) {
+			int minIdx = i;
+			for (int j = i + 1; j < array.length; j++) {
+				if (array[j] < array[minIdx])
+					minIdx = j;
+			}
+			int temp = array[minIdx];
+			array[minIdx] = array[i];
+			array[i] = temp;
+		}
+	}
 
-  public static void swap(int[] a, int i, int j) {
-    if (i == j)
-      return;
-    int t = a[i];
-    a[i] = a[j];
-    a[j] = t;
-  }
-
-  public static void selectionSort(int[] nums) {
-    for (int i = 0; i < nums.length - 1; ++i) {
-      int minIdx = i;
-      for (int j = i + 1; j < nums.length; ++j) {
-        if (nums[j] < nums[minIdx])
-          minIdx = j;
-      }
-      swap(nums, i, minIdx);
-    }
-  }
-
-  public static void insertionSort(int[] nums) {
-    // [2, 3, 1]
-    // [2, 3, 3]
-    // [2, 2, 3]
-    // [1, 2, 3]
-    for (int i = 0; i < nums.length; ++i) {
-      int key = nums[i];
-      int j = i - 1;
-      while (j >= 0 && key < nums[j]) {
-        nums[j + 1] = nums[j];
-        j--;
-      }
-      nums[j + 1] = key;
-    }
-  }
-
-  public static String printArray(int[] a) {
-    return Arrays.toString(a);
-  }
-
-  public static void merge(int[] nums, int[] a, int[] b) {
-    System.out.println("merging: " + printArray(a) + " and " + printArray(b));
-    int p1 = 0, p2 = 0;
-    for (int i = 0; i < nums.length; ++i) {
-      if (p1 < a.length && p2 < b.length) {
-        if (a[p1] <= b[p2]) {
-          nums[i] = a[p1];
-          p1++;
-        } else {
-          nums[i] = b[p2];
-          p2++;
-        }
-      } else if (p1 < a.length) {
-        nums[i] = a[p1];
-        p1++;
-      } else {
-        nums[i] = b[p2];
-        p2++;
-      }
-    }
-  }
-
-  public static void mergeSort(int[] nums) {
-    if (nums.length <= 1)
-      return;
-    int[] left = Arrays.copyOfRange(nums, 0, nums.length / 2); // [0, mid[
-    int[] right = Arrays.copyOfRange(nums, nums.length / 2, nums.length); // [mid, N[
-    mergeSort(left);
-    mergeSort(right);
-    merge(nums, left, right);
-  }
-
-  public static void main(String[] args) {
-    int[] nums1 = {1, 4, 21, 100, 124};
-    int idx = bs(nums1, 1, 0, nums1.length - 1);
-    System.out.println(idx);
-    int[] nums2 = {2, 1, 10, 5};
-    insertionSort(nums2);
-    System.out.println(Arrays.toString(nums2));
-    int[] res = new int[nums1.length + nums2.length];
-    merge(res, nums1, nums2);
-    System.out.println(Arrays.toString(res));
-    int[] nums3 = {10, 11, 5, 20, 100};
-    mergeSort(nums3);
-    System.out.println(Arrays.toString(nums3));
-  }
+	public static void insertionSort(int[] array) { // O(n^2)
+		for (int i = 1; i < array.length; i++) {
+			int key = array[i];
+			int j = i - 1;
+			while (j >= 0 && key < array[j]) {
+				array[j + 1] = array[j];
+				j--;
+			}
+			array[j + 1] = key;
+		}
+	}
+	
+	public static void merge(int[] array, int start, int mid, int end) {
+		int a = mid - start + 1;
+		int b = end - mid;
+		int[] leftArray = new int[a];
+		int[] rightArray  = new int[b];
+		for (int i = 0; i < a; i++) {
+			leftArray[i] = array[start + i];
+		}
+		for (int j = 0; j < b; j++) {
+			rightArray[j] = array[mid + 1 + j];
+		}
+		int i = 0, j = 0, k = start;
+		while (i < a && j < b) {
+			if (leftArray[i] <= rightArray[j]) {
+				array[k] = leftArray[i];
+				i++;
+			} else {
+				array[k] = rightArray[j];
+				j++;
+			}
+			k++;
+		}
+		while (i < a) {
+			array[k] = leftArray[i];
+			i++;
+			k++;
+		}
+		while (j < b) {
+			array[k] = rightArray[j];
+			j++;
+			k++;
+		}
+	}
+	
+	public static void mergeSort(int[] array, int start, int end) { //O(nlogn)
+		if (start < end) {
+			int mid = (start + end) / 2;
+		    mergeSort(array, start, mid);
+		    mergeSort(array, mid + 1, end);
+		    merge(array, start, mid, end);
+		}
+	}
+	
+	public static int partition(int[] array, int low, int high) {
+		int pivot = array[high];
+		int i = low - 1;
+		for (int j = low; j < high; j++) {
+			if (array[j] <= pivot) {
+				i++;
+				int temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+		}
+		int temp = array[i + 1];
+		array[i + 1] = array[high];
+		array[high] = temp;
+		return i + 1;
+	}
+	
+	public static void quickSort(int[] array, int low, int high) {
+		if (low < high) {
+			int p = partition(array, low, high);
+			quickSort(array, low, p - 1);
+			quickSort(array, p + 1, high);
+		}
+	}
+	
+	
 }
