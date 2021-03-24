@@ -12,7 +12,7 @@ public class SearchAndSort {
 //		insertionSort(array);
 //		System.out.println(Arrays.toString(array));
 //		mergeSort(array, 0, array.length - 1);
-//		quickSort(array, 0, array.length - 1);
+		quickSort(array, 0, array.length - 1);
 		System.out.println(Arrays.toString(array));
 	}
 	
